@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 40px auto;
+            text-align: center;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: black;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #333;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: green;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Simple URL Shortener</h2>
+
+    <input type="text" id="longUrl" placeholder="Enter long URL here">
+    <br>
+    <button onclick="shortenUrl()">Shorten URL</button>
+
+    <div id="result"></div>
+
+    <script>
+        async function shortenUrl() {
+            const longUrl = document.getElementById("longUrl").value;
+
+            const response = await fetch("/shorten", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ longUrl })
+            });
+
+            const data = await response.json();
+
+            if (data.shortUrl) {
+                document.getElementById("result").innerHTML =
+                    `Short URL: <a href="${data.shortUrl}" target="_blank">${data.shortUrl}</a>`;
+            } else {
+                document.getElementById("result").innerHTML =
+                    `<span style="color:red">Error shortening URL</span>`;
+            }
+        }
+    </script>
+
+</body>
+
+</html>
